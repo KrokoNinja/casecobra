@@ -15,6 +15,9 @@ import { ArrowRight, Check, ChevronsUpDown } from "lucide-react";
 import { BASE_PRICE } from "@/config/products";
 import { useUploadThing } from "@/lib/uploadthing";
 import { useToast } from "@/components/ui/use-toast";
+import { useMutation } from "@tanstack/react-query";
+import { saveConfig as _saveConfig, SaveConfigArgs } from "./actions";
+import { useRouter } from "next/navigation";
 
 interface DesignConfiguratorProbs {
     configId: string;
@@ -28,6 +31,24 @@ interface DesignConfiguratorProbs {
 const DesignConfigurator = ({ configId, imageUrl, imageDimensions } : DesignConfiguratorProbs) => {
 
     const { toast } = useToast();
+    const router = useRouter();
+
+    const {mutate: saveConfig} = useMutation({
+        mutationKey: ["save-config"],
+        mutationFn: async (args: SaveConfigArgs) => {
+            await Promise.all([saveConfiguration(), _saveConfig(args)])
+        },
+        onError: () => {
+            toast({
+                title: "Something went wrong.",
+                description: "There was an error on our end. Please try again.",
+                variant: "destructive",
+            })
+        },
+        onSuccess: () => {
+            router.push(`/configure/preview?id=${configId}`)
+        }
+    });
 
     const [options, setOptions] = useState<{
         color: (typeof COLORS)[number];
@@ -274,7 +295,13 @@ const DesignConfigurator = ({ configId, imageUrl, imageDimensions } : DesignConf
                         <p className="font-medium whitespace-nowrap">
                             {formatPrice((BASE_PRICE + options.material.price + options.finish.price) / 100)}
                         </p>
-                        <Button onClick={() => saveConfiguration()} size={"sm"} className="w-full" >
+                        <Button onClick={() => saveConfig({
+                            configId,
+                            color: options.color.value,
+                            model: options.model.value,
+                            material: options.material.value,
+                            finish: options.finish.value,
+                        })} size={"sm"} className="w-full" >
                             Continue
                             <ArrowRight className="h-4 w-4 ml-1.5 inline" />
                         </Button>
