@@ -11,7 +11,7 @@ const STEPS = [
     },
     {
         name: "Step 2: customize design",
-        description: "Mek the case yours",
+        description: "Make the case yours",
         url: "/design"
     },
     {
