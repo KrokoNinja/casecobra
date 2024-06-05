@@ -33,7 +33,7 @@ const DesignConfigurator = ({ configId, imageUrl, imageDimensions } : DesignConf
     const { toast } = useToast();
     const router = useRouter();
 
-    const {mutate: saveConfig} = useMutation({
+    const {mutate: saveConfig, isPending} = useMutation({
         mutationKey: ["save-config"],
         mutationFn: async (args: SaveConfigArgs) => {
             await Promise.all([saveConfiguration(), _saveConfig(args)])
@@ -301,7 +301,7 @@ const DesignConfigurator = ({ configId, imageUrl, imageDimensions } : DesignConf
                             model: options.model.value,
                             material: options.material.value,
                             finish: options.finish.value,
-                        })} size={"sm"} className="w-full" >
+                        })} size={"sm"} className="w-full" isLoading={isPending} disabled={isPending} loadingText="Saving"  >
                             Continue
                             <ArrowRight className="h-4 w-4 ml-1.5 inline" />
                         </Button>
