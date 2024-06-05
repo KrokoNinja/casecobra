@@ -5,6 +5,7 @@ import { getPaymentStatus } from "./actions";
 import { useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import PhonePreview from "@/components/PhonePreview";
+import { formatPrice } from "@/lib/utils";
 
 const ThankYou = () => {
 
@@ -96,9 +97,24 @@ const ThankYou = () => {
                     </div>
 
                     <div>
-                        <p className="font-md text-zinc-900">Payment status</p>
-                        <p className="mt-2 text-zinc-700">Paid</p>
+                        <p className="font-md text-zinc-900">Shipping method</p>
+                        <p className="mt-2 text-zinc-700">DHL, takes up to 3 working days</p>
                     </div>
+                </div>
+            </div>
+
+            <div className="space-y-6 border-t border-zinc-200 pt-10 text-sm">
+                <div className="flex justify-between">
+                    <p className="font-medium text-zinc-900">Subtotal</p>
+                    <p className="font-medium text-zinc-900">{formatPrice(amount)}</p>
+                </div>
+                <div className="flex justify-between">
+                    <p className="font-medium text-zinc-900">Shipping</p>
+                    <p className="font-medium text-zinc-900">{formatPrice(0)}</p>
+                </div>
+                <div className="flex justify-between">
+                    <p className="font-medium text-zinc-900">Total</p>
+                    <p className="font-medium text-zinc-900">{formatPrice(amount)}</p>
                 </div>
             </div>
         </div>
